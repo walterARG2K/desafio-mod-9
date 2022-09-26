@@ -25,7 +25,7 @@ async function sendMailProductPaid(userId, productId) {
     await newUser.pull();
     const fullName = newUser.data.fullName;
     const email = newUser.data.email;
-    const productData = await algoliaIndex.getObject(productId);
+    const productData = (await algoliaIndex.getObject(productId)) as any;
     const msg = {
         to: email,
         from: "daniwortiz003@gmail.com",

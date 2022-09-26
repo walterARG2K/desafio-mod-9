@@ -58,7 +58,7 @@ export async function getOrdersByUser(userId) {
         collectionOrderId.push(doc.id);
     });
 
-    const productsUser = await algoliaIndex.getObjects(collectionOrdersIds);
+    const productsUser = (await algoliaIndex.getObjects(collectionOrdersIds)) as any;
 
     productsUser.results.forEach((item, index) => {
         collectionOrders.push({
@@ -77,7 +77,7 @@ export async function getOrder(orderId) {
     await order.pull();
 
     try {
-        const productUser = await algoliaIndex.getObject(order.data.productId);
+        const productUser = (await algoliaIndex.getObject(order.data.productId)) as any;
 
         return {
             product: productUser.results,
