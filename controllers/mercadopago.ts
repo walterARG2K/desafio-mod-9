@@ -35,5 +35,6 @@ async function sendMailProductPaid(userId, productId, order) {
         subject: "¡Información sobre tu Producto!",
         html: sendEmailProductPaid(fullName, productData.results, order),
     };
-    sendgridMail(msg);
+    await sendgridMail(msg);
+    return true;
 }
