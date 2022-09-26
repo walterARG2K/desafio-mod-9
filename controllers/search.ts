@@ -17,7 +17,7 @@ export async function searchProductsByQuery(query, queryOffset, queryLimit) {
 
 export async function findProductById(productId) {
     try {
-        const product = await algoliaIndex.findObject((hit) => hit.objectID === productId);
+        const product = (await algoliaIndex.findObject((hit) => hit.objectID === productId)) as any;
         return product.object.results;
     } catch (error) {
         throw error;
