@@ -45,7 +45,7 @@ export async function sendCode(email: string) {
             subject: "¡Código de verificación!",
             html: htmlMail(cleanEmail, auth.data.code),
         };
-        sendgridMail(msg);
+        await sendgridMail(msg);
 
         return { message: "código enviado al email " + auth.data.email };
     } catch (error) {
