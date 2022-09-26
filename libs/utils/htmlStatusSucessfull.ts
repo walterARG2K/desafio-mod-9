@@ -1,4 +1,4 @@
-export function sendEmailProductPaid(fullName, dataProduct) {
+export function sendEmailProductPaid(fullName, dataProduct, order) {
     return `
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" style="font-family:Montserrat, sans-serif">
@@ -136,7 +136,7 @@ padding:10px 30px!important;
 <tr>
 </tr>
 <tr>
-<td align="left" style="padding:0;Margin:0;padding-left:20px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Montserrat, sans-serif;line-height:24px;color:#333333;font-size:16px">DESCRIPCIÓN: ${dataProduct.description}<br></p></td>
+<td align="left" style="padding:0;Margin:0;padding-left:20px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Montserrat, sans-serif;line-height:24px;color:#333333;font-size:16px">DESCRIPCIÓN: ${dataProduct.Description}<br></p></td>
 </tr>
 <tr>
 <td style="padding:20px;Margin:0;font-size:0" align="center">
@@ -158,7 +158,7 @@ padding:10px 30px!important;
 </table></td>
 </tr>
 <tr>
-<td align="left" style="padding:0;Margin:0;padding-left:20px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Montserrat, sans-serif;line-height:24px;color:#333333;font-size:16px">DETALLES DEL PRODUCTO: ${dataProduct?.extraInfo}<br></p></td>
+<td align="left" style="padding:0;Margin:0;padding-left:20px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Montserrat, sans-serif;line-height:24px;color:#333333;font-size:16px">DETALLES DEL PRODUCTO: ${order?.extraInfo}<br></p></td>
 </tr>
 <tr>
 <td style="padding:20px;Margin:0;font-size:0" align="center">

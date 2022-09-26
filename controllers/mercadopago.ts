@@ -15,12 +15,13 @@ export async function getAndUpdateOrder(id) {
     newOrder.push();
 
     //Send confirmation product payment status
-    if (orderStatus === "paid") sendMailProductPaid(newOrder.data.userId, newOrder.data.productId);
+    if (orderStatus === "paid")
+        sendMailProductPaid(newOrder.data.userId, newOrder.data.productId, newOrder.data);
 
     return mpOrder.response.order_status;
 }
 
-async function sendMailProductPaid(userId, productId) {
+async function sendMailProductPaid(userId, productId, order) {
     const newUser = new User(userId);
     await newUser.pull();
     const fullName = newUser.data.fullName;
@@ -30,7 +31,7 @@ async function sendMailProductPaid(userId, productId) {
         to: email,
         from: "daniwortiz003@gmail.com",
         subject: "¡Información sobre tu Producto!",
-        html: sendEmailProductPaid(fullName, productData.results),
+        html: sendEmailProductPaid(fullName, productData.results, order),
     };
     sendgridMail(msg);
 }
