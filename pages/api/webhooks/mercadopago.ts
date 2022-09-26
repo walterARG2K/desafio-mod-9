@@ -6,7 +6,7 @@ export default Method({
     async post(req: NextApiRequest, res: NextApiResponse) {
         const id = req.query.id;
         const topic = req.query.topic;
-        if (topic === "merchant_order") {
+        if (topic === "payment") {
             getAndUpdateOrder(id);
         }
         res.send("ok");
