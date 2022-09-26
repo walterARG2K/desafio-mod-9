@@ -31,7 +31,7 @@ async function createPreferenceMP(data, productId, userId) {
                 },
             ],
             external_reference: orderId.id,
-            notification_url: "https://webhook.site/9527cb95-5137-4564-b68c-81f3e19b6231",
+            notification_url: "https://desafio-mod-9-lnzk.vercel.app/api/webhooks/mercadopago",
         }),
     });
     const preferenceMP = await resultFetchMP.json();
