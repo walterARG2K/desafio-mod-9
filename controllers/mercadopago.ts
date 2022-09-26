@@ -12,11 +12,10 @@ export async function getAndUpdateOrder(id) {
     const orderStatus = mpOrder.response.order_status;
     await newOrder.pull();
     newOrder.data.status = orderStatus;
+    newOrder.push();
 
     //Send confirmation product payment status
-    if (orderStatus === "paid" && !newOrder.data.mailSend) {
-        newOrder.data.mailSend = true;
-        newOrder.push();
+    if (orderStatus === "paid") {
         await sendMailProductPaid(newOrder.data.userId, newOrder.data.productId, newOrder.data);
     }
 
@@ -35,8 +34,6 @@ async function sendMailProductPaid(userId, productId, order) {
         subject: "¡Información sobre tu Producto!",
         html: sendEmailProductPaid(fullName, productData.results, order),
     };
-    await sendgridMail(msg).catch((e) => {
-        console.log(e);
-    });
+    await sendgridMail(msg);
     return true;
 }
