@@ -38,13 +38,17 @@ export async function sendCode(email: string) {
     auth.data.expires = expires;
     auth.push();
 
-    const msg = {
-        to: cleanEmail,
-        from: "daniwortiz003@gmail.com",
-        subject: "¡Código de verificación!",
-        html: htmlMail(cleanEmail, auth.data.code),
-    };
-    sendgridMail(msg);
+    try {
+        const msg = {
+            to: cleanEmail,
+            from: "daniwortiz003@gmail.com",
+            subject: "¡Código de verificación!",
+            html: htmlMail(cleanEmail, auth.data.code),
+        };
+        sendgridMail(msg);
 
-    return { message: "código enviado al email " + auth.data.email };
+        return { message: "código enviado al email " + auth.data.email };
+    } catch (error) {
+        throw { error };
+    }
 }
