@@ -12,11 +12,13 @@ export async function getAndUpdateOrder(id) {
     const orderStatus = mpOrder.response.order_status;
     await newOrder.pull();
     newOrder.data.status = orderStatus;
-    newOrder.push();
 
     //Send confirmation product payment status
-    if (orderStatus === "paid")
+    if (orderStatus === "paid" && !newOrder.data.mailSend) {
+        newOrder.data.mailSend = true;
+        newOrder.push();
         sendMailProductPaid(newOrder.data.userId, newOrder.data.productId, newOrder.data);
+    }
 
     return mpOrder.response.order_status;
 }
