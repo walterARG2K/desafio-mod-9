@@ -17,7 +17,7 @@ export async function getAndUpdateOrder(id) {
     if (orderStatus === "paid" && !newOrder.data.mailSend) {
         newOrder.data.mailSend = true;
         newOrder.push();
-        sendMailProductPaid(newOrder.data.userId, newOrder.data.productId, newOrder.data);
+        await sendMailProductPaid(newOrder.data.userId, newOrder.data.productId, newOrder.data);
     }
 
     return mpOrder.response.order_status;
