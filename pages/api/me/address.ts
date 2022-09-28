@@ -1,4 +1,4 @@
-import { getUser, updateUser, updateUserAdress } from "controllers/me";
+import { updateUserAdress } from "controllers/me";
 import { middleware } from "libs/middleware";
 import Method from "micro-method-router";
 import { NextApiRequest, NextApiResponse } from "next";

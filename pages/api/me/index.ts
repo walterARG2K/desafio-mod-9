@@ -10,6 +10,7 @@ const bodySchema = yup
         email: yup.string().email(),
         fullName: yup.string(),
     })
+    .noUnknown(true)
     .strict();
 
 async function get(req: NextApiRequest, res: NextApiResponse, userId) {

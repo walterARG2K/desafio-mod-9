@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
-import { algoliaIndex } from "libs/algolia";
 import { searchProductsByQuery } from "controllers/search";
 
 export default methods({

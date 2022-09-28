@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
-import { findProductById } from "controllers/search";
 import { getOrdersByUser } from "controllers/order";
 import { middleware } from "libs/middleware";
 
