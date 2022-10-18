@@ -1,9 +1,11 @@
 import { algoliaIndex } from "libs/algolia";
 
 export async function searchProductsByQuery(query, queryOffset, queryLimit) {
-    const response = await algoliaIndex.search(query, {
+    const aBuscar = query || "";
+
+    const response = await algoliaIndex.search(aBuscar, {
         offset: queryOffset,
-        length: queryLimit <= 10 ? queryLimit : 10,
+        length: queryLimit <= 12 ? queryLimit : 12,
     });
     return {
         results: response.hits,
