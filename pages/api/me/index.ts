@@ -21,6 +21,8 @@ async function get(req: NextApiRequest, res: NextApiResponse, userId) {
 async function patch(req: NextApiRequest, res: NextApiResponse, userId) {
     try {
         const data = await bodySchema.validate(req.body);
+        if (data.email === "") throw "email está vacío";
+
         const userData = await updateUser(data, userId);
         res.send(userData);
     } catch (error) {
