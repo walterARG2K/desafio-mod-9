@@ -8,7 +8,7 @@ const bodySchema = yup
     .object()
     .shape({
         direction: yup.string(),
-        postalCode: yup.number(),
+        postalCode: yup.string(),
         city: yup.string(),
         province: yup.string(),
     })
