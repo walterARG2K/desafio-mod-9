@@ -19,8 +19,6 @@ export async function updateUser(data, userId) {
 }
 
 export async function updateUserAdress(data, userId) {
-    console.log(data, userId);
-
     const newUser = new User(userId);
     newUser.data = { address: data };
 
