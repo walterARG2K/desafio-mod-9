@@ -19,7 +19,10 @@ export async function searchProductsByQuery(query, queryOffset, queryLimit) {
 
 export async function findProductById(productIds) {
     try {
-        const products = (await algoliaIndex.getObjects(productIds)) as any;
+        var arrProducts = productIds;
+        if (typeof productIds === "string") arrProducts = arrProducts.split();
+
+        const products = (await algoliaIndex.getObjects(arrProducts)) as any;
         return products.results;
     } catch (error) {
         throw error;
