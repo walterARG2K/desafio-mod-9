@@ -78,7 +78,6 @@ export async function getOrdersByUser(userId) {
                         return {
                             product: j.results,
                             quantity: i.info[index].quantity,
-
                             productID: j.objectID,
                         };
                     } else return "";
@@ -86,6 +85,7 @@ export async function getOrdersByUser(userId) {
                 .filter((i) => i !== ""),
             orderId: collectionOrderId[aux],
             status: i.status,
+            payment_url: i.payment_url,
         };
     });
     return productsOrder;
