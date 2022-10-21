@@ -2,11 +2,16 @@ import { algoliaIndex } from "libs/algolia";
 import { Order } from "models/orders";
 import { findProductById } from "./search";
 
-async function createPreferenceMP(data, productId, userId) {
-    const product = await findProductById(productId);
+async function createPreferenceMP(data, productIds, userId) {
+    const products = await findProductById(productIds);
+
     const newOrder = await Order.createOrder({
-        extraInfo: data,
-        productId,
+        info: products.map((i, index) => {
+            return {
+                id: i.objectID,
+                quantity: data[index].quantity,
+            };
+        }),
         userId,
         status: "pending",
     });
@@ -20,15 +25,18 @@ async function createPreferenceMP(data, productId, userId) {
         },
         body: JSON.stringify({
             items: [
-                {
-                    title: product.Name,
-                    description: product.Description,
-                    picture_url: product.Images[0].url,
-                    category_id: product.Type,
-                    quantity: data.quantity,
-                    currency_id: "ARS",
-                    unit_price: product["Unit cost"],
-                },
+                ...products.map((i, index) => {
+                    return {
+                        id: i.objectID,
+                        title: i.results.Name,
+                        description: i.results.Description,
+                        picture_url: i.results.Images[0].url,
+                        category_id: i.results.Type,
+                        quantity: data[index].quantity,
+                        currency_id: "ARS",
+                        unit_price: i.results["Unit cost"],
+                    };
+                }),
             ],
             external_reference: orderId.id,
             notification_url: "https://desafio-mod-9-lnzk.vercel.app/api/webhooks/mercadopago",
@@ -38,9 +46,10 @@ async function createPreferenceMP(data, productId, userId) {
     return { url: preferenceMP.init_point, orderId: orderId.id };
 }
 
-export async function createOrderAndPreference(data, productId, userId) {
+export async function createOrderAndPreference({ productsInfo }, userId) {
     try {
-        return await createPreferenceMP(data, productId, userId);
+        const productIds = productsInfo.map((i) => i.id);
+        return await createPreferenceMP(productsInfo, productIds, userId);
     } catch (error) {
         throw error;
     }
@@ -51,25 +60,33 @@ export async function getOrdersByUser(userId) {
     const collectionOrdersFirestore = [];
     const collectionOrdersIds = [];
     const collectionOrderId = [];
-    const collectionOrders = [];
     orders.docs.forEach((doc) => {
         collectionOrdersFirestore.push(doc.data());
-        collectionOrdersIds.push(doc.data().productId);
+        collectionOrdersIds.push(doc.data().info.map((i) => i.id));
         collectionOrderId.push(doc.id);
     });
 
-    const productsUser = (await algoliaIndex.getObjects(collectionOrdersIds)) as any;
+    const productsUser = (await algoliaIndex.getObjects(collectionOrdersIds.flat())) as any;
 
-    productsUser.results.forEach((item, index) => {
-        collectionOrders.push({
-            product: item.results,
-            orderId: collectionOrderId[index],
-            productId: item.objectID,
-            status: collectionOrdersFirestore[index].status,
-        });
+    const productsOrder = collectionOrdersFirestore.map((i, aux) => {
+        return {
+            productInfo: productsUser.results
+                .map((j, index) => {
+                    if (j.objectID === i?.info[index]?.id) {
+                        return {
+                            product: j.results,
+                            quantity: i.info[index].quantity,
+
+                            productID: j.objectID,
+                        };
+                    } else return "";
+                })
+                .filter((i) => i !== ""),
+            orderId: collectionOrderId[aux],
+            status: i.status,
+        };
     });
-
-    return collectionOrders;
+    return productsOrder;
 }
 
 export async function getOrder(orderId) {

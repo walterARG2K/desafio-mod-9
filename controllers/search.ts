@@ -17,10 +17,10 @@ export async function searchProductsByQuery(query, queryOffset, queryLimit) {
     };
 }
 
-export async function findProductById(productId) {
+export async function findProductById(productIds) {
     try {
-        const product = (await algoliaIndex.findObject((hit) => hit.objectID === productId)) as any;
-        return product.object.results;
+        const products = (await algoliaIndex.getObjects(productIds)) as any;
+        return products.results;
     } catch (error) {
         throw error;
     }
