@@ -43,6 +43,8 @@ async function createPreferenceMP(data, productIds, userId) {
         }),
     });
     const preferenceMP = await resultFetchMP.json();
+    newOrder.data.payment_url = preferenceMP.init_point;
+    newOrder.push();
     return { url: preferenceMP.init_point, orderId: orderId.id };
 }
 
