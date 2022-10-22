@@ -18,7 +18,7 @@ export async function getAndUpdateOrder(id) {
 
         //Send confirmation product payment status
         if (orderStatus === "paid") {
-            await sendMailProductPaid(newOrder.data.userId, newOrder.data.productId, newOrder.data);
+            await sendMailProductPaid(newOrder.data.userId, newOrder.data.info, newOrder.data);
         }
 
         return mpOrder.response.order_status;
@@ -27,18 +27,23 @@ export async function getAndUpdateOrder(id) {
     }
 }
 
-async function sendMailProductPaid(userId, productId, order) {
-    const newUser = new User(userId);
-    await newUser.pull();
-    const fullName = newUser.data.fullName;
-    const email = newUser.data.email;
-    const productData = (await algoliaIndex.getObject(productId)) as any;
-    const msg = {
-        to: email,
-        from: "daniwortiz003@gmail.com",
-        subject: "¡Información sobre tu Producto!",
-        html: sendEmailProductPaid(fullName, productData.results, order),
-    };
-    await sendgridMail(msg);
+async function sendMailProductPaid(userId, productsData, order) {
+    try {
+        const newUser = new User(userId);
+        await newUser.pull();
+        const fullName = newUser.data.fullName;
+        const email = newUser.data.email;
+        const productsIds = productsData.map((i) => i.id);
+        const productData = (await algoliaIndex.getObjects(productsIds)) as any;
+        const msg = {
+            to: email,
+            from: "daniwortiz003@gmail.com",
+            subject: "¡Información sobre tu Producto!",
+            html: sendEmailProductPaid(fullName, productData.results, order),
+        };
+        await sendgridMail(msg);
+    } catch (error) {
+        throw error;
+    }
     return true;
 }
