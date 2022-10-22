@@ -10,12 +10,9 @@ export async function getAndUpdateOrder(id) {
         const mpOrder = await mercadopago.merchant_orders.get(id);
 
         const orderId = mpOrder.body.external_reference;
-        console.log("ORDERID ====>", orderId);
         const newOrder = new Order(orderId);
-        console.log("NEW ORDER =====>", newOrder);
         const orderStatus = mpOrder.response.order_status;
         await newOrder.pull();
-        console.log("NEW ORDER DATA =====>", newOrder.data);
         newOrder.data.status = orderStatus;
         newOrder.push();
 
