@@ -7,7 +7,7 @@ export default Method({
         const id = req.query.id;
         const topic = req.query.topic;
         if (topic === "merchant_order") {
-            getAndUpdateOrder(id);
+            await getAndUpdateOrder(id);
         }
         console.log("ok");
 
