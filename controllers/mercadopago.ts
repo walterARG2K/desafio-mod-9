@@ -25,6 +25,8 @@ export async function getAndUpdateOrder(id) {
 
         return mpOrder.response.order_status;
     } catch (error) {
+        console.log("ERROR ======>", error);
+
         return error;
     }
 }
