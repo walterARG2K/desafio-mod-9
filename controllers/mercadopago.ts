@@ -6,20 +6,24 @@ import { Order } from "models/orders";
 import { User } from "models/users";
 
 export async function getAndUpdateOrder(id) {
-    const mpOrder = await mercadopago.merchant_orders.get(id);
-    const orderId = mpOrder.body.external_reference;
-    const newOrder = new Order(orderId);
-    const orderStatus = mpOrder.response.order_status;
-    await newOrder.pull();
-    newOrder.data.status = orderStatus;
-    newOrder.push();
+    try {
+        const mpOrder = await mercadopago.merchant_orders.get(id);
+        const orderId = mpOrder.body.external_reference;
+        const newOrder = new Order(orderId);
+        const orderStatus = mpOrder.response.order_status;
+        await newOrder.pull();
+        newOrder.data.status = orderStatus;
+        newOrder.push();
 
-    //Send confirmation product payment status
-    if (orderStatus === "paid") {
-        await sendMailProductPaid(newOrder.data.userId, newOrder.data.productId, newOrder.data);
+        //Send confirmation product payment status
+        if (orderStatus === "paid") {
+            await sendMailProductPaid(newOrder.data.userId, newOrder.data.productId, newOrder.data);
+        }
+
+        return mpOrder.response.order_status;
+    } catch (error) {
+        return error;
     }
-
-    return mpOrder.response.order_status;
 }
 
 async function sendMailProductPaid(userId, productId, order) {
