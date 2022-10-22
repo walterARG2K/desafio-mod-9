@@ -72,17 +72,21 @@ export async function getOrdersByUser(userId) {
 
     const productsOrder = collectionOrdersFirestore.map((i, aux) => {
         return {
-            productInfo: productsUser.results
-                .map((j, index) => {
-                    if (j.objectID === i?.info[index]?.id) {
-                        return {
-                            product: j.results,
-                            quantity: i.info[index].quantity,
-                            productID: j.objectID,
-                        };
-                    } else return "";
-                })
-                .filter((i) => i !== ""),
+            productInfo: i?.info?.map((info, index) => {
+                let find = false;
+                return productsUser.results
+                    .map((p) => {
+                        if (p.objectID === info.id && !find) {
+                            find = true;
+                            return {
+                                product: p.results,
+                                quantity: i.info[index].quantity,
+                                productID: p.objectID,
+                            };
+                        } else return "";
+                    })
+                    .filter((i) => i !== "");
+            }),
             orderId: collectionOrderId[aux],
             status: i.status,
             payment_url: i.payment_url,

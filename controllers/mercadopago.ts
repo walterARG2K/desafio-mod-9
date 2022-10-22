@@ -8,12 +8,10 @@ import { User } from "models/users";
 export async function getAndUpdateOrder(id) {
     try {
         const mpOrder = await mercadopago.merchant_orders.get(id);
-        console.log("MPORDER =====>", mpOrder);
 
         const orderId = mpOrder.body.external_reference;
         const newOrder = new Order(orderId);
         const orderStatus = mpOrder.response.order_status;
-        console.log("ORDER STATUS =====>", orderStatus);
         await newOrder.pull();
         newOrder.data.status = orderStatus;
         newOrder.push();
@@ -25,8 +23,6 @@ export async function getAndUpdateOrder(id) {
 
         return mpOrder.response.order_status;
     } catch (error) {
-        console.log("ERROR ======>", error);
-
         return error;
     }
 }

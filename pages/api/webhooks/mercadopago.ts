@@ -9,7 +9,6 @@ export default Method({
         if (topic === "merchant_order") {
             await getAndUpdateOrder(id);
         }
-        console.log("ok");
 
         res.send("ok");
     },
