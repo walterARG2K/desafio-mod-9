@@ -9,6 +9,8 @@ export default Method({
         if (topic === "merchant_order") {
             getAndUpdateOrder(id);
         }
+        console.log("ok");
+
         res.send("ok");
     },
 });
