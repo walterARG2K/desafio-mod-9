@@ -40,6 +40,9 @@ async function createPreferenceMP(data, productIds, userId) {
             ],
             external_reference: orderId.id,
             notification_url: "https://desafio-mod-9-lnzk.vercel.app/api/webhooks/mercadopago",
+            back_urls: {
+                success: "https://ecommerce-desafio-mod-10.vercel.app/thanks",
+            },
         }),
     });
     const preferenceMP = await resultFetchMP.json();
